@@ -31,6 +31,46 @@ public class FlowingCups {
         System.out.println(timeToFill(row-1,column-1,glassMatrix,flowRateMatrix));
 
     }
+
+    private static double timeToFillV2(int r, int c, double[][] glassMatrix, double[][] flowRateMatrix){
+        boolean found = false;
+        double currentTime = 0;
+        double timeToSkip = 0;
+        double leftParent;
+        double rightParent;
+
+        while (!found) {
+            for (int i = 0; i < glassMatrix.length; i++) {
+                for (int j = 0; j <= i; j++) {
+
+                    if(i == 0){
+                        glassMatrix[i][j] = 1;
+                        flowRateMatrix[i][j] = 0.1;
+                        currentTime = 10;
+                    }
+                    else if (glassMatrix[i][j] == 1){}
+                    //singular parent cases where the glasses are at the edges
+                    else if(j == i){
+                        leftParent = flowRateMatrix[i-1][j-1];
+
+                        glassMatrix[i][j] = glassMatrix[i-1][j-1] + 1 / (flowRateMatrix[i-1][j-1] / 2);
+                        flowRateMatrix[i][j] = flowRateMatrix[i-1][j-1] / 2;
+                    }
+                    else if(j == 0){
+                        rightParent = glassMatrix[i-1][j];
+
+                        glassMatrix[i][j] = glassMatrix[i-1][j] + 1 / (flowRateMatrix[i-1][j] / 2);
+                        flowRateMatrix[i][j] = flowRateMatrix[i-1][j] / 2;
+                    }
+
+
+                }
+            }
+        }
+
+        return 0;
+    }
+
     //main function which calculates the time in which any singular cup becomes filled
     //r is the row, c is the column
     private static double timeToFill(int r, int c, double[][] glassMatrix, double[][] flowRateMatrix){
